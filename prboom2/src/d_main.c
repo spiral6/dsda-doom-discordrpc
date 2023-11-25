@@ -109,6 +109,10 @@
 #include "dsda/wad_stats.h"
 #include "dsda/zipfile.h"
 #include "dsda/gl/render_scale.h"
+#include "dsda/discord-files/discordrpc.h"
+#define DISCORD_REQUIRE(x) assert(x == DiscordResult_Ok)
+#include "assert.h"
+
 
 #include "heretic/mn_menu.h"
 #include "heretic/sb_bar.h"
@@ -540,8 +544,14 @@ static void D_DoomLoop(void)
   if (dsda_IntConfig(dsda_config_startup_delay_ms) > 0)
     I_uSleep(dsda_IntConfig(dsda_config_startup_delay_ms) * 1000);
 
+  // INIT_DISCORDRPC();
+
+  // struct DiscordApplication* discordapp = getDiscord();
+
   for (;;)
   {
+    DISCORD_REQUIRE(discordapp.core->run_callbacks(discordapp.core));
+
     if (I_Interrupted())
       I_SafeExit(0);
 
@@ -2011,6 +2021,12 @@ static void D_DoomMainSetup(void)
 
   // do not try to interpolate during timedemo
   M_ChangeUncappedFrameRate();
+
+  arg = dsda_Arg(dsda_arg_discordrpc);
+  if (arg->found)
+  {
+    INIT_DISCORDRPC();
+  }
 
   lprintf(LO_DEBUG, "\n"); // Separator after setup
 }

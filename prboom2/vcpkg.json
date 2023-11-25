@@ -24,7 +24,8 @@
         "opusfile"
       ]
     },
-    "zlib"
+    "zlib",
+    "discord-game-sdk"
   ],
   "features": {
     "dumb": {

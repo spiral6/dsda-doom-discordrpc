@@ -39,6 +39,9 @@ set(COMMON_SRC
     dsda/demo.h
     dsda/destructible.c
     dsda/destructible.h
+    dsda/discord-files/discord_game_sdk.h
+    dsda/discord-files/discordrpc.h
+    dsda/discord-files/discordrpc.c
     dsda/endoom.c
     dsda/endoom.h
     dsda/episode.c
@@ -585,6 +588,22 @@ function(AddGameExecutable TARGET SOURCES)
     if(HAVE_LIBPORTMIDI)
         target_link_libraries(${TARGET} PRIVATE PortMidi::portmidi)
     endif()
+    
+    # find_library(DISCORD_GAME_SDK discord_game_sdk PATHS "W:\\Standalone\\Programming\\Runtimes\\vcpkg\\packages\\discord-game-sdk_x64-windows\\lib")
+    find_library(DISCORD_GAME_SDK discord_game_sdk)
+    target_link_libraries(${TARGET} PRIVATE ${DISCORD_GAME_SDK})
+    find_path(DISCORD_GAME_SDK "discord-game-sdk/discord.h")
+    target_include_directories(${TARGET} PRIVATE ${DISCORD_GAME_SDK_INCLUDE})
+
+    # find_library(DISCORD_CPP_GAME_SDK_LIBRARY_RELEASE NAMES discord_game_sdk_cpp
+	# 	PATHS "W:\\Standalone\\Programming\\Runtimes\\vcpkg\\packages\\discord-game-sdk_x64-windows\\lib")
+	# find_library(DISCORD_CPP_GAME_SDK_LIBRARY_DEBUG NAMES discord_game_sdk_cpp
+	# 	PATHS "W:\\Standalone\\Programming\\Runtimes\\vcpkg\\packages\\discord-game-sdk_x64-windows\\debug\\lib")
+	
+	include(SelectLibraryConfigurations)
+	select_library_configurations(DISCORD_GAME_SDK)
+	
+	# target_link_libraries(${TARGET} PRIVATE ${DISCORD_CPP_GAME_SDK_LIBRARY})
 
     add_dependencies(${TARGET} dsda-doom-wad)
 
