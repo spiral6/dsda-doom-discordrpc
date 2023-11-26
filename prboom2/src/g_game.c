@@ -113,6 +113,7 @@
 #include "dsda/tracker.h"
 #include "dsda/split_tracker.h"
 #include "dsda/utility.h"
+#include "dsda/discord-files/discordrpc.h"
 
 struct
 {
@@ -1245,6 +1246,12 @@ static void G_DoLoadLevel (void)
   // killough 5/13/98: in case netdemo has consoleplayer other than green
   ST_Start();
   HU_Start();
+
+  dsda_arg_t* arg;
+  arg = dsda_Arg(dsda_arg_discordrpc);
+  if (arg->found) {
+    UpdateGameLevelDiscord();
+  }
 
   // The border texture can change between maps, which must queue a backscreen fill
   {

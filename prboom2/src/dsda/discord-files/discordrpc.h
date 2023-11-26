@@ -4,6 +4,7 @@
 #include "discord_game_sdk.h"
 
 void INIT_DISCORDRPC();
+void UpdateGameLevelDiscord(void);
 struct DiscordApplication {
     struct IDiscordCore* core;
     // struct IDiscordUserManager* users;
