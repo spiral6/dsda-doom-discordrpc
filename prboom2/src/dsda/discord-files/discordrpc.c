@@ -44,25 +44,9 @@ void INIT_DISCORDRPC(void)
     lprintf(LO_INFO, "Discord RPC enabled!\n");
 
     memset(&activity, 0, sizeof(activity));
-    strcpy(activity.details, "testing app details");
-    strcpy(activity.state, "testing app state");
+    strcpy(activity.details, "Menu");
+    // strcpy(activity.state, "testing app state");
     // sprintf(activity.name, "Test", 0);
-    strcpy(activity.assets.large_image, "doom2");
-
-    discordapp.activities = discordapp.core->get_activity_manager(discordapp.core);
-
-
-    // lprintf(LO_INFO, discordapp.activities);
-    // lprintf(LO_INFO, &discordapp);
-
-    discordapp.activities->update_activity(discordapp.activities, &activity, &discordapp, UpdateActivityCallback);
-    
-    // DISCORD_REQUIRE(discordapp.core->run_callbacks(discordapp.core));
-}
-
-void UpdateGameLevelDiscord(void) {
-    
-    lprintf(LO_INFO, "DiscordRPC: Playing %s\n", doomverstr);
     char asset_name[9] = "";
     switch(gamemission){
         case doom:
@@ -81,8 +65,23 @@ void UpdateGameLevelDiscord(void) {
             strcpy(asset_name,"nerve");
             break;
     }
+    lprintf(LO_INFO, "DiscordRPC: Playing %s\n", doomverstr);
     lprintf(LO_INFO, "DiscordRPC: Using asset %s\n", asset_name);
-    lprintf(LO_INFO, "DiscordRPC: Playing E%dM%d of %s on difficulty %s\n", gameepisode, gamemap, asset_name, skill_info.name);
+    strcpy(activity.assets.large_image, asset_name);
+
+    discordapp.activities = discordapp.core->get_activity_manager(discordapp.core);
+
+
+    // lprintf(LO_INFO, discordapp.activities);
+    // lprintf(LO_INFO, &discordapp);
+
+    discordapp.activities->update_activity(discordapp.activities, &activity, &discordapp, UpdateActivityCallback);
+    
+    // DISCORD_REQUIRE(discordapp.core->run_callbacks(discordapp.core));
+}
+
+void UpdateGameLevelDiscord(void) {
+
     extern dsda_string_t hud_title;
 
     lprintf(LO_INFO, "DiscordRPC: Playing map %s\n", hud_title.string);
@@ -92,13 +91,12 @@ void UpdateGameLevelDiscord(void) {
         lprintf(LO_INFO, "DiscordRPC: Found map title: %s\n", map_name);        
     }
 
-    // lprintf(LO_INFO, "FINISHED: %s\n", dsda_MapLumpName(gameepisode, gamemap));
-
-    
-    // struct DiscordActivity activity;
-    // memset(&activity, 0, sizeof(activity));
-    sprintf(activity.details, "Playing %s on %s", asset_name, skill_info.name);
-    sprintf(activity.state, "Map %d: %s", gamemap, map_name);
+    sprintf(activity.details, "Playing %s on %s", doomverstr, skill_info.name);
+    if (gamemission == doom) {
+        sprintf(activity.state, "%s", hud_title.string);
+    } else {
+        sprintf(activity.state, "Map %d: %s", gamemap, map_name);
+    }
     #ifdef _WIN32
         time_t ltime;
         time(&ltime);
@@ -108,8 +106,6 @@ void UpdateGameLevelDiscord(void) {
     #else
         activity.timestamps.start = (unsigned long) time();
     #endif
-    // sprintf(activity.name, "Test", 0);
-    strcpy(activity.assets.large_image, asset_name);
     discordapp.activities->update_activity(discordapp.activities, &activity, &discordapp, UpdateActivityCallback);
 
 }
