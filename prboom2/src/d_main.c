@@ -544,13 +544,16 @@ static void D_DoomLoop(void)
   if (dsda_IntConfig(dsda_config_startup_delay_ms) > 0)
     I_uSleep(dsda_IntConfig(dsda_config_startup_delay_ms) * 1000);
 
-  // INIT_DISCORDRPC();
-
-  // struct DiscordApplication* discordapp = getDiscord();
+  dsda_arg_t *discord_arg;
+  discord_arg = dsda_Arg(dsda_arg_discordrpc);
 
   for (;;)
   {
-    DISCORD_REQUIRE(discordapp.core->run_callbacks(discordapp.core));
+
+    if (discord_arg->found)
+    {
+      DISCORD_REQUIRE(discordapp.core->run_callbacks(discordapp.core));
+    }
 
     if (I_Interrupted())
       I_SafeExit(0);
