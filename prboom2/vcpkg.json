@@ -25,7 +25,8 @@
       ]
     },
     "zlib",
-    "discord-game-sdk"
+    "discord-game-sdk",
+    "sqlite3"
   ],
   "features": {
     "dumb": {

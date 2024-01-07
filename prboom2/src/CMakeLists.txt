@@ -39,6 +39,8 @@ set(COMMON_SRC
     dsda/demo.h
     dsda/destructible.c
     dsda/destructible.h
+    dsda/discord-files/mapnames.h
+    dsda/discord-files/mapnames.c
     dsda/discord-files/discord_game_sdk.h
     dsda/discord-files/discordrpc.h
     dsda/discord-files/discordrpc.c
@@ -604,6 +606,10 @@ function(AddGameExecutable TARGET SOURCES)
 	select_library_configurations(DISCORD_GAME_SDK)
 	
 	# target_link_libraries(${TARGET} PRIVATE ${DISCORD_CPP_GAME_SDK_LIBRARY})
+
+    find_package(unofficial-sqlite3 CONFIG REQUIRED)
+    # target_include_directories(${TARGET} PRIVATE ${SQLite3_INCLUDE_DIRS})
+    target_link_libraries(${TARGET} PRIVATE unofficial::sqlite3::sqlite3)
 
     add_dependencies(${TARGET} dsda-doom-wad)
 

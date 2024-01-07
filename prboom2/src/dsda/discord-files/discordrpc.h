@@ -2,9 +2,11 @@
 #define __DISCORDRPC__
 
 #include "discord_game_sdk.h"
+#include "dsda/utility.h"
 
 void INIT_DISCORDRPC();
 void UpdateGameLevelDiscord(void);
+void updateMapName(dsda_string_t* map_title);
 struct DiscordApplication {
     struct IDiscordCore* core;
     // struct IDiscordUserManager* users;
